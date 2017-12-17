@@ -55,6 +55,10 @@ class InterfaceData {
     bool resetFlag;
   } reset;
 
+  struct Settings {
+    bool mobileConfigure;
+  } settings;
+
   bool disable;
   bool flaggedForSleep;
 

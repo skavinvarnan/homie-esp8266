@@ -37,7 +37,12 @@ void BootConfig::setup() {
   strcat_P(apName, PSTR("-"));
   strcat(apName, DeviceId::get());
 
-  WiFi.softAPConfig(ACCESS_POINT_IP, ACCESS_POINT_IP, IPAddress(255, 255, 255, 0));
+  if (Interface::get().settings.mobileConfigure) {
+    WiFi.softAPConfig(ACCESS_POINT_IP, IPAddress(0, 0, 0, 0), IPAddress(255, 255, 255, 0));
+  } else {
+    WiFi.softAPConfig(ACCESS_POINT_IP, ACCESS_POINT_IP, IPAddress(255, 255, 255, 0));
+  }
+  
   if (Interface::get().configurationAp.secured) {
     WiFi.softAP(apName, Interface::get().configurationAp.password);
   } else {
@@ -69,7 +74,9 @@ void BootConfig::setup() {
   });
   _http.on("/wifi/status", HTTP_GET, [this](AsyncWebServerRequest *request) { _onWifiStatusRequest(request); });
   _http.on("/proxy/control", HTTP_PUT, [this](AsyncWebServerRequest *request) { _onProxyControlRequest(request); }).onBody(BootConfig::__parsePost);
-  _http.onNotFound([this](AsyncWebServerRequest *request) { _onCaptivePortal(request); });
+  if(!Interface::get().settings.mobileConfigure) {
+    _http.onNotFound([this](AsyncWebServerRequest *request) { _onCaptivePortal(request); });
+  }
   _http.begin();
 }
 

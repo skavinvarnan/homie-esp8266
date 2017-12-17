@@ -160,6 +160,11 @@ void HomieClass::loop() {
   }
 }
 
+void HomieClass::mobileConfigure(bool mobileConfigure) {
+  Interface::get().getLogger() << F("Mobile configuration ") << mobileConfigure << endl;
+  Interface::get().settings.mobileConfigure = mobileConfigure;
+}
+
 HomieClass& HomieClass::disableLogging() {
   _checkBeforeSetup(F("disableLogging"));
 

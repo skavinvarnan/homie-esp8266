@@ -37,6 +37,7 @@ class HomieClass {
   ~HomieClass();
   void setup();
   void loop();
+  void mobileConfigure(bool mobileConfigure);
 
   void __setFirmware(const char* name, const char* version);
   void __setBrand(const char* brand) const;
